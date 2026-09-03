@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
     <title>Topographic Timer</title>
 </head>
 
@@ -34,7 +35,16 @@
         </section>
         <!-- Preset Modes & Main Controls -->
          <section class="controls-container">
-            
+            <div class="mode-selector">
+                <button class="mode-btn active" data-time="25">Pomodoro</button>
+                <button class="mode-btn" data-time="5">Short Break</button>
+                <button class="mode-btn" data-time="15">Long Break</button>
+            </div>
+            <div class="primary-controls">
+                <button id="start-btn" class="btn btn-primary">Start</button>
+                <button id="pause-btn" class="btn btn-primary" hidden>Pause</button>
+                <button id="reset-btn" class="btn btn-primary">Reset</button>
+            </div>
          </section>
     </main>
 </body>
