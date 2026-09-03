@@ -4,15 +4,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pomodoro Timer</title>
+    <link rel="stylesheet" href="styles.css">
+    <title>Topographic Timer</title>
 </head>
 
-<body>
-    <div class="clock">00:00</div>
-    <div class="session-counter"></div>
-    <div class="session=label"></div>
-    <div class="topo-map"></div>
-    <div class="controls-container"></div>
+<body class="day-theme">
+    <main class="app-container">
+        <!-- Top Header: Task & Meta -->
+        <header class="header-hud">
+            <input type="text" class="task-input" placeholder="What do you want to focus on?" />
+            <div class="hud-top-actions">
+                <button id="stats-btn" class="icon-btn" aria-label="Session Stats">Stats</button>
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Dark/Light Mode">Theme change</button>
+            </div>
+        </header>
+        <!-- Timer & Session Overlay -->
+        <section class="timer-display">
+            <div class="clock" id="clock">25:00</div>
+            <div class="session-info">
+                <span class="session-label" id="session-label">Focus</span>
+                <span class="session-counter" id="session-counter">Session 1 / 4</span>
+            </div>
+        </section>
+        <!-- Interactive Canvas Area -->
+        <section class="map-viewport">
+            <div class="topo-map">
+                <canvas id="terrain-canvas"></canvas>
+            </div>
+        </section>
+        <!-- Preset Modes & Main Controls -->
+         <section class="controls-container">
+            
+         </section>
+    </main>
 </body>
 
 </html>
