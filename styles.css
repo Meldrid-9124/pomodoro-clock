@@ -125,3 +125,49 @@ body {
     height: 100%;
     display: block;
 }
+
+.controls-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mode-selector {
+  display: flex;
+  background: var(--panel-bg);
+  padding: 0.25rem;
+  border-radius: 8px;
+  justify-content: space-around;
+}
+
+.mode-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 0.5rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.mode-btn.active {
+  background: var(--bg-color);
+  color: var(--text-main);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.primary-controls {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-primary {
+  background-color: var(--accent-color);
+  color: #FFF;
+}
+
+.btn-secondary, .btn-tertiary {
+  background-color: var(--panel-bg);
+  color: var(--text-main);
+}
