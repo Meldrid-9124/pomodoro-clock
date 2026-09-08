@@ -1,3 +1,11 @@
+/* mobile first development was followed here.*/
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
 :root {
     --bg-color: #F4F1EA;
     --panel-bg: rgba(255, 255, 255, 0.6);
@@ -13,4 +21,48 @@ body.night-theme {
     --text-main: #E2E8F0;
     --text-muted: #94A3B8;
     --accent-color: #00F2FE;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: var(--font-family);
+    /* dvh works better than vh for layouts on mobile*/
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 480px;
+    /* Mobile width constraint */
+    height: 100dvh;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.header-hud {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.task-input {
+    /* Used background transparent instead of opacity as it does
+    not affect any text or borders*/
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--text-muted);
+  color: var(--text-main);
+  font-size: 1rem;
+  padding: 0.25rem 0;
+  width: 100%;
+  /* To remove the auto focus border around the button elements*/
+  outline: none;
 }
