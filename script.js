@@ -91,6 +91,21 @@ function handleTimerComplete() {
 }
 
 function switchMode(button) {
+    // If the button clicked is already active, do nothing
+    if (button.classList.contains('active')) return;
+
+    // Check if a timer is currently running or partially completed
+    const isSessionInProgress = state.isRunning || state.timeLeft < state.duration;
+
+    if (isSessionInProgress) {
+        const confirmSwitch = window.confirm(
+            "A session is currently active. Switching modes will reset your progress. Are you sure?"
+        );
+
+        // If user cancels, exit without changing mode
+        if (!confirmSwitch) return;
+    }
+
     modeButtons.forEach(btn => btn.classList.remove('active'));
     button.classList.add('active');
     // the dataset here is used to access the data-time attribute
