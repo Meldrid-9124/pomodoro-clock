@@ -3,16 +3,15 @@ class TerrainGrid {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
 
-        // Grid settings optimized for mobile DPR
-        this.gridSize = 12; // 12x12 grid points
-        this.angle = Math.PI / 6; // 30-degree isometric tilt angle
+        // Grid settings
+        this.gridSize = 8; // Clean 8x8 base grid matching reference scale
+        this.angle = Math.PI / 9; // ~20-degree isometric tilt angle (flatter perspective)
 
         this.resizeCanvas();
         window.addEventListener('resize', () => this.resizeCanvas());
     }
 
     resizeCanvas() {
-        // Handle High-DPI (Retina) mobile screens for razor-sharp lines
         const dpr = window.devicePixelRatio || 1;
         const rect = this.canvas.parentElement.getBoundingClientRect();
 
@@ -26,13 +25,14 @@ class TerrainGrid {
         this.drawGrid();
     }
 
-    // Convert 3D grid coordinate (x, y, z) into 2D screen space (px, py)
+    // Isometric projection mapping
     isoProject(x, y, z = 0) {
         const centerX = this.width / 2;
-        const centerY = this.height / 2 + 20; // Slight downward offset for mobile HUD
-        const scale = Math.min(this.width, this.height) * 0.049; // Responsive scale factor
+        const centerY = this.height / 2;
+        
+        // Dynamic scale factor derived directly from canvas width for mobile viewports
+        const scale = this.width * 0.060; // original: 0.085 
 
-        // Isometric projection transformation matrix
         const screenX = centerX + (x - y) * Math.cos(this.angle) * scale;
         const screenY = centerY + (x + y) * Math.sin(this.angle) * scale - z * scale;
 
@@ -42,12 +42,11 @@ class TerrainGrid {
     drawGrid() {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        // Read theme state from document body
         const isNight = document.body.classList.contains('night-theme');
-        const gridColor = isNight ? 'rgba(0, 242, 254, 0.25)' : 'rgba(180, 130, 90, 0.35)';
-        const tickColor = isNight ? 'rgba(255, 255, 255, 0.4)' : 'rgba(100, 80, 60, 0.5)';
+        const gridColor = isNight ? 'rgba(0, 242, 254, 0.4)' : 'rgba(180, 140, 110, 0.55)';
+        const labelColor = isNight ? 'rgba(0, 242, 254, 0.85)' : 'rgba(120, 90, 70, 0.85)';
 
-        this.ctx.lineWidth = 1;
+        this.ctx.lineWidth = 1.5;
 
         const offset = this.gridSize / 2;
 
@@ -75,45 +74,60 @@ class TerrainGrid {
             this.ctx.stroke();
         }
 
-        // 3. Draw Edge Tick Marks (Latitude/Longitude Detail)
-        this.drawEdgeTicks(offset, tickColor);
+        // 3. Draw Edge Ticks and Skewed Labels
+        this.drawEdgeTicks(offset, labelColor);
     }
 
     drawEdgeTicks(offset, color) {
         this.ctx.fillStyle = color;
-        this.ctx.font = '500 9px monospace';
+        // Bump font size and use system sans font matching reference UI
+        this.ctx.font = '500 11px system-ui, -apple-system, sans-serif';
 
-        // Array of mock latitude/longitude coordinates to display
-        const coordsLat = ['93° W', '92° W', '91° W', '90° W', '89° W', '88° W', '87° W'];
-        const coordsLong = ['50° N', '51° N', '52° N', '53° N', '54° N', '55° N', '56° N'];
+        const coordsLong = ['93° W', '91° W', '89° W', '87° W'];
+        const coordsLat = ['50° N', '52° N', '54° N', '56° N'];
 
-        let labelIdx = 0;
+        let idx = 0;
+        const step = 2; // Space labels across alternate grid lines
 
-        for (let i = -offset; i <= offset; i += 2) {
-            // 1. Bottom-Left edge labels (Longitude ticks)
+        for (let i = -offset + 1; i < offset; i += step) {
+            // --- Bottom-Left Edge (Longitude) ---
             const ptLeft = this.isoProject(i, offset, 0);
-            const textLong = coordsLong[labelIdx % coordsLong.length];
+            const textLong = coordsLong[idx % coordsLong.length];
+
             this.ctx.save();
-            this.ctx.translate(ptLeft.x - 8, ptLeft.y + 12);
-            // Rotate text to match isometric projection angle
-            this.ctx.rotate(-this.angle / 1.5);
+            
+            this.ctx.translate(ptLeft.x - 4, ptLeft.y + 12);
+            
+            // True Isometric Matrix Transformation (Skew + Rotate + Scale)
+            // [a, b, c, d, e, f] -> Applies shear along the isometric plane
+            const cosA = Math.cos(-this.angle);
+            const sinA = Math.sin(-this.angle);
+            this.ctx.transform(cosA, sinA, 0, 0.85, 0, 0);
+            
             this.ctx.textAlign = 'right';
             this.ctx.fillText(textLong, 0, 0);
             this.ctx.restore();
 
-            // 2. Bottom-Right edge labels (Latitude ticks)
+            // --- Bottom-Right Edge (Latitude) ---
             const ptRight = this.isoProject(offset, i, 0);
-            const textLat = coordsLat[labelIdx % coordsLat.length];
+            const textLat = coordsLat[idx % coordsLat.length];
 
             this.ctx.save();
-            this.ctx.translate(ptRight.x + 8, ptRight.y + 12);
-            // Rotate text along the opposite isometric angle
-            this.ctx.rotate(this.angle / 1.5);
+            this.ctx.translate(ptRight.x + 4, ptRight.y + 12);
+            
+            // Opposite Isometric Matrix Shear Transformation
+            const cosB = Math.cos(this.angle);
+            const sinB = Math.sin(this.angle);
+            const skewY = Math.sin(this.angle);
+            const scaleY = Math.sin(this.angle);
+
+            this.ctx.transform(1, 0.5, 0, 1, 0, 0);
+            
             this.ctx.textAlign = 'left';
             this.ctx.fillText(textLat, 0, 0);
             this.ctx.restore();
 
-            labelIdx++;
+            idx++;
         }
     }
 }
