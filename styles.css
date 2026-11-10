@@ -7,8 +7,8 @@
 
 
 :root {
-    --bg-color: #F4F1EA;
-    --panel-bg: rgba(255, 255, 255, 0.6);
+    --bg-color: #FEF2E6;
+    --panel-bg: #E0CBB8;
     --text-main: #2B2B2B;
     --text-muted: #767676;
     --accent-color: #C86D51;
@@ -136,7 +136,7 @@ body {
   display: flex;
   background: var(--panel-bg);
   padding: 0.25rem;
-  border-radius: 8px;
+  border-radius: 48px;
   justify-content: space-around;
 }
 
@@ -147,7 +147,7 @@ body {
   padding: 0.5rem;
   color: var(--text-muted);
   font-weight: 500;
-  border-radius: 6px;
+  border-radius: 48px;
   cursor: pointer;
 }
 
@@ -157,10 +157,6 @@ body {
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.primary-controls {
-  display: flex;
-  gap: 0.75rem;
-}
 
 .btn-primary {
   background-color: var(--accent-color);
@@ -170,4 +166,18 @@ body {
 .btn-secondary, .btn-tertiary {
   background-color: var(--panel-bg);
   color: var(--text-main);
+}
+
+
+.primary-controls {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+
+}
+
+.btn-primary {
+    border-radius: 48px;
+    padding: 11px 60px;
+    font-size: 1.2rem;
 }
